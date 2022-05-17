@@ -5,6 +5,8 @@ services:
     build: ./nginx
     ports:
       - 5000:80
+    networks:
+      - slut-network
     depends_on:
       - nuxt
       - wp
@@ -12,6 +14,8 @@ services:
   nuxt:
     build: ./nuxt-wp
     restart: always
+    networks:
+      - slut-network
     depends_on:
       - mysql
       - wp
@@ -20,6 +24,8 @@ services:
   mysql:
     image: mysql:latest
     restart: always
+    networks:
+      - slut-network
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: haberol
@@ -31,10 +37,12 @@ services:
   wp:
     build: ./wordpress
     restart: always
+    networks:
+      - slut-network
     depends_on:
       - mysql
     volumes:
-      - ./wordpress/tailpress:/app/wordpress/wp-content/themes
+      - ./wordpress/tailpress:/app/wordpress/wp-content/themes/tailpress
     environment:
       WORDPRESS_DB_HOST: mysql
       WORDPRESS_DB_USER: user
@@ -43,3 +51,7 @@ services:
 
 volumes:
   mysql:
+networks:
+  slut-network:
+
+
